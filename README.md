@@ -1,4 +1,4 @@
-# Go-Live Plan skill for Claude
+# Go-Live Plan skill
 
 A Claude skill that helps tech sellers build, maintain and pressure-test **Go-Live Plans**: shared plans that map every step from today to the customer's go-live date. It is the buyer-facing version of a mutual action plan, as opposed to an internal close plan.
 
