@@ -1,6 +1,8 @@
 ---
 name: go-live-plan
 description: Create, update, QA or diagnose a Go-Live Plan (mutual action plan) for a B2B tech deal, as a shared Google Doc plus a private seller-only companion, tuned to the seller's own sales cycle.
+license: MIT
+compatibility: Any agent that supports Agent Skills (SKILL.md). Works best when the agent can create and edit Google Docs; otherwise it produces files or Markdown to paste.
 ---
 
 # Go-Live Plan
@@ -15,6 +17,15 @@ The skill has four modes. Work out which one the seller wants from their message
 2. **Update**: apply call notes, emails or status changes to an existing plan.
 3. **QA**: audit a plan before it is shared or after edits. QA also runs automatically at the end of Create and Update.
 4. **Diagnose**: assess how each stakeholder engages with the plan and what that says about the deal.
+
+**This skill is platform-neutral.** It describes what to do, not which tool to call. Before you start, check which of these your environment gives you, and use whatever your platform calls them:
+
+- **Create Google Docs** (a Google Drive or Google Docs integration). Needed to create the plan as a live doc.
+- **Edit Google Docs in place.** Needed for Update mode to keep the buyer's link the same.
+- **Create files** (.docx or .md). The fallback when you can't create Google Docs.
+- **Persistent memory or project files.** Optional; used to recall the seller's sales-cycle profile.
+
+If you have none of these, the skill still works: produce the documents as Markdown in your reply for the seller to paste into Google Docs.
 
 ---
 
@@ -55,7 +66,7 @@ Stage durations differ hugely between sellers. A dev tool sold to startups close
 **Look for the profile in this order. Stop at the first source that has it.**
 
 1. **This conversation.** Use anything the seller has already said about their typical cycle.
-2. **Persistent context, if you have any.** Check memory files, saved preferences, project instructions or knowledge (e.g. a memory store, project files, CLAUDE.md) and earlier Go-Live Plans the seller can point you to. Look for: what they sell, typical deal size, buyer segment, and how long POCs, legal, procurement, budget approval and implementation usually take.
+2. **Persistent context, if you have any.** Check memory files, saved preferences, project instructions or knowledge (e.g. a memory store, project files, or agent instruction files such as AGENTS.md or CLAUDE.md) and earlier Go-Live Plans the seller can point you to. Look for: what they sell, typical deal size, buyer segment, and how long POCs, legal, procurement, budget approval and implementation usually take.
 3. **Ask the seller.** Ask only for what steps 1 and 2 didn't cover.
 
 **If you found values in memory or context**, don't use them silently. Show them in one compact table (Stage | Typical duration | Source) and ask the seller to confirm or correct them in a single reply. Memory can be out of date, and the seller's average may not fit this deal: an enterprise deal and a mid-market deal from the same seller can differ by months.
@@ -124,7 +135,7 @@ Sequencing rules:
 
 ### Step 5: Build the customer-facing Google Doc
 
-Use the Google Drive connector to create the doc. The fastest route is uploading HTML (`text/html`), which Drive converts into a native Google Doc with headings and tables. If a Google Workspace skill is available, load it before the first Drive or Docs call. Title the doc: `<Customer> Go-Live Plan`. Keep styling neutral (dark grey headers, one muted accent colour), or use the customer's brand colour if the seller provides it. It should look like the customer's document, not a seller template.
+If you can create Google Docs, create the doc that way. Where your integration supports it, the fastest route is uploading HTML (`text/html`), which Google Drive converts into a native Google Doc with headings and tables. If your platform has its own guidance or skill for working with Google Docs, follow it. Title the doc: `<Customer> Go-Live Plan`. Keep styling neutral (dark grey headers, one muted accent colour), or use the customer's brand colour if the seller provides it. It should look like the customer's document, not a seller template.
 
 **Currency in HTML uploads.** Drive's HTML import can treat the text between two `$` signs in the same paragraph as an equation and silently delete it. "$28,560 a year. The current contract ($96,000" came out as "96,000". To avoid this:
 
@@ -163,13 +174,13 @@ Contents:
 - Forecast view: the date the seller would commit to versus the buyer's target, and the 1–2 steps most likely to slip
 - Open placeholders still to confirm
 
-**If no Google Drive connector is available**, say so in one line and tell the seller that connecting Google Drive lets the skill create live Google Docs. Then build both docs as .docx files (use a Word/docx skill if available) and tell the seller to upload the customer doc to Google Docs before sharing, since the plan only works as a single live version.
+**If you can't create Google Docs**, say so in one line and tell the seller that connecting Google Drive to their assistant lets the skill create live Google Docs. Then produce both documents as .docx files if you can create files, or as Markdown in your reply if you can't. Tell the seller to put the customer doc into Google Docs before sharing, since the plan only works as a single live version.
 
 ### Step 7: Run QA, then hand over
 
 Run the full QA below, fix what you can, and give the seller:
 
-- Links to both docs (or the two .docx files)
+- Links to both docs (or the two files, or the Markdown)
 - The QA report (blockers fixed, warnings remaining, placeholders and unconfirmed durations)
 - 3 suggested next actions, e.g. "Walk your champion through stages 6–10 and confirm the legal and procurement durations"
 
@@ -177,7 +188,7 @@ Run the full QA below, fix what you can, and give the seller:
 
 ## Mode 2: Update
 
-**Editing needs the Google Docs connector.** The Google Drive connector can create and read docs but cannot edit them. With the Google Docs connector, make the changes in place so the link the buyer has stays the same. Without it, do **not** create a new copy of the plan; a new copy means a new link and two versions. Instead, give the seller a precise change list (row, column, old value, new value) to apply by hand, and say in one line that connecting Google Docs lets the skill make the edits directly.
+**Editing needs a tool that can edit Google Docs in place.** Some Google Drive integrations can create and read docs but not edit them. If you can edit in place, make the changes there so the link the buyer has stays the same. If you can't, do **not** create a new copy of the plan; a new copy means a new link and two versions. Instead, give the seller a precise change list (row, column, old value, new value) to apply by hand, and say in one line that an integration that can edit Google Docs would let the skill make the edits directly.
 
 1. Get the existing plan: a Google Doc link, or pasted content. Read the current version; never work from memory of an earlier version.
 2. Get the new information: call notes, an email thread, or the seller's summary.
