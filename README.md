@@ -49,6 +49,12 @@ If it finds your numbers in memory, it shows them to you to confirm before using
 
 The skill lives in the [`go-live-plan`](go-live-plan) folder. You can also download it as `go-live-plan.zip` from the [latest release](../../releases/latest).
 
+- **Quickest (recommended):** install with the [skills.sh](https://skills.sh) CLI. It detects the agents you use (Claude Code, Codex, Cursor, Gemini CLI and many more) and installs the skill for them.
+
+  ```bash
+  npx skills add mrudulgole/go-live-plan-skill
+  ```
+
 - **Assistants with a skills upload (for example the Claude apps):** upload `go-live-plan.zip` in the assistant's skills settings.
 - **Coding agents that read skills from disk:** clone the repo and copy the folder into the agent's skills directory.
 
